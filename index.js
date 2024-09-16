@@ -515,3 +515,48 @@ setInterval(function(){
   tiller()
   stallForces()
 }, 20)
+function getTouch() {
+  if (lastGC != geofs.animation.values.groundContact && geofs.animation.values.groundContact != 0) {
+    if (Math.abs(geofs.animation.values.climbrate) >= 1000) {
+      geofs.animation.values.tdSoft = 0;
+      geofs.animation.values.tdHard = 1000;
+      setTimeout(function(){
+        geofs.animation.values.tdHard = 1000;
+      }, 1000)
+    }
+    else {
+      if (geofs.animation.values.climbrate >= -1000) {
+        geofs.animation.values.paxClap = 1;
+        setTimeout(function(){
+          geofs.animation.values.paxClap = 0;
+        }, 5000)
+      }
+      geofs.animation.values.tdSoft = 8;
+      geofs.animation.values.tdHard = 0;
+      setTimeout(function(){
+        geofs.animation.values.tdSoft = 0;
+      }, 1000)
+    }
+  }
+  lastGC = geofs.animation.values.groundContact;
+};
+
+
+function getFrontTouch() {
+  if (geofs.animation.values.nose_suspensionSuspension > 0) {
+    noseDown = 1;
+  }
+  else {
+    noseDown = 0;
+  }
+
+  if (lastGCF != noseDown && noseDown != 0 && geofs.camera.currentModeName === "cockpit") {
+    geofs.animation.values.tdFront = 1;
+    setTimeout(function(){
+      geofs.animation.values.tdFront = 0;
+    }, 1000)
+  }
+  lastGCF = noseDown;
+};
+
+function doShake() {
